@@ -20,12 +20,12 @@ import {
 //    project credentials from https://console.firebase.google.com
 // ─────────────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyChrcM5LoC1m9AjcIrGn7xPXQlB94CV3Hw",
-  authDomain: "kalaverse-f0175.firebaseapp.com",
-  projectId: "kalaverse-f0175",
-  storageBucket: "kalaverse-f0175.firebasestorage.app",
-  messagingSenderId: "836329886130",
-  appId: "1:836329886130:web:5353076363f69e87d614ab",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
