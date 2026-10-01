@@ -1,7 +1,10 @@
 // src/pages/Dashboard.jsx
 // Shared dashboard component for both Expert and Learner roles
 import { useNavigate } from 'react-router-dom';
-import { Rss, User, Wand2, GraduationCap, ArrowRight, Sparkles, BookOpen, Users, Star } from 'lucide-react';
+import { Rss, User, Wand2, GraduationCap, ArrowRight, Sparkles, BookOpen, Users, Star, Hand, Clock } from 'lucide-react';
+import { TUTORIALS, getPracticePath } from '../tutorials';
+
+const AR_TUTORIALS = TUTORIALS.filter((t) => getPracticePath(t));
 
 const STAT_COLORS = {
   purple: { bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.25)', text: '#c084fc', icon: '#a855f7' },
@@ -67,6 +70,53 @@ function QuickAction({ label, description, icon: Icon, onClick, color = '#a855f7
       </div>
       <ArrowRight size={16} color="#475569" />
     </button>
+  );
+}
+
+function PracticeCard({ tutorial, onStart }) {
+  return (
+    <div className="tutorial-card" onClick={onStart} style={{ cursor: 'pointer' }}>
+      <div style={{ height: '140px', overflow: 'hidden', background: 'rgba(255,255,255,0.04)' }}>
+        {tutorial.thumbnail && (
+          <img
+            src={tutorial.thumbnail}
+            alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }}
+          />
+        )}
+      </div>
+      <div style={{ padding: '16px' }}>
+        <span className="badge badge-free" style={{ marginBottom: '8px' }}>
+          <Sparkles size={10} /> Live AR practice
+        </span>
+        <h4 style={{ fontFamily: 'Outfit', fontSize: '0.95rem', color: '#f1f5f9', margin: '8px 0 6px', lineHeight: 1.4 }}>
+          {tutorial.title}
+        </h4>
+        <p style={{ color: '#64748b', fontSize: '0.82rem', lineHeight: 1.5, margin: '0 0 12px' }}>
+          {tutorial.description}
+        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '0.78rem', marginBottom: '12px' }}>
+          <Clock size={12} />
+          {tutorial.duration}
+        </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onStart();
+          }}
+          style={{
+            width: '100%', padding: '10px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+            background: 'linear-gradient(135deg, #a855f7, #ec4899)', color: 'white',
+            fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.875rem',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+          }}
+        >
+          Start AR Practice
+          <ArrowRight size={14} />
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -149,6 +199,15 @@ export default function Dashboard({ user }) {
                 onClick={() => navigate('/feed')}
                 color="#a855f7"
               />
+              {!isExpert && AR_TUTORIALS[0] && (
+                <QuickAction
+                  label="Start AR Practice"
+                  description={`Practise ${AR_TUTORIALS[0].title} with your camera and an AI coach`}
+                  icon={Hand}
+                  onClick={() => navigate(getPracticePath(AR_TUTORIALS[0]))}
+                  color="#22c55e"
+                />
+              )}
               {isExpert && (
                 <QuickAction
                   label="View My Profile"
@@ -209,6 +268,27 @@ export default function Dashboard({ user }) {
             </div>
           </div>
         </div>
+
+        {/* AR Practice */}
+        {AR_TUTORIALS.length > 0 && (
+          <section style={{ marginTop: '40px' }} aria-labelledby="ar-practice-heading">
+            <h3 id="ar-practice-heading" style={{ fontSize: '0.8rem', fontFamily: 'Outfit', color: '#94a3b8', fontWeight: 600, margin: '0 0 6px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              AR Practice
+            </h3>
+            <p style={{ color: '#64748b', fontSize: '0.875rem', margin: '0 0 16px' }}>
+              Practise with your camera: hand tracking checks each step and an AI coach guides you.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+              {AR_TUTORIALS.map((tutorial) => (
+                <PracticeCard
+                  key={tutorial.id}
+                  tutorial={tutorial}
+                  onStart={() => navigate(getPracticePath(tutorial))}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
