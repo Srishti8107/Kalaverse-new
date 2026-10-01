@@ -122,12 +122,12 @@ export function describeCameraError(err) {
 /* ------------------------------------------------------------------ */
 
 const COLORS = {
-  correct: '#3FBF6B',
-  incorrect: '#E5556A',
-  uncertain: '#EDB03D',
-  paper: 'rgba(243, 244, 241, 0.55)',
-  faint: 'rgba(243, 244, 241, 0.16)',
-  done: 'rgba(63, 191, 107, 0.30)',
+  correct: '#7FA07A',
+  incorrect: '#C8664A',
+  uncertain: '#C9A24A',
+  paper: 'rgba(251, 248, 243, 0.6)',
+  faint: 'rgba(251, 248, 243, 0.18)',
+  done: 'rgba(127, 160, 122, 0.32)',
 };
 
 /**
@@ -140,10 +140,10 @@ export function drawOverlay(ctx, hands, model) {
   ctx.clearRect(0, 0, W, H);
   if (!model) return;
 
-  const accent = COLORS[model.result] ?? '#F3F4F1'; // must stay 6-digit hex (alpha suffixes appended below)
+  const accent = COLORS[model.result] ?? '#FBF8F3'; // must stay 6-digit hex (alpha suffixes appended below)
   const px = (z) => ({ x: z.x * W, y: z.y * H, w: z.w * W, h: z.h * H });
   const font = Math.max(12, Math.round(W / 64));
-  ctx.font = `600 ${font}px "Atkinson Hyperlegible", system-ui, sans-serif`;
+  ctx.font = `600 ${font}px "DM Sans", system-ui, sans-serif`;
   ctx.textBaseline = 'top';
 
   // Craft area
@@ -212,7 +212,7 @@ export function drawOverlay(ctx, hands, model) {
       ctx.lineTo(pts[b].x, pts[b].y);
     }
     ctx.stroke();
-    ctx.fillStyle = primary ? '#F3F4F1' : COLORS.faint;
+    ctx.fillStyle = primary ? '#FBF8F3' : COLORS.faint;
     for (const p of pts) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, primary ? 3.5 : 2.5, 0, Math.PI * 2);

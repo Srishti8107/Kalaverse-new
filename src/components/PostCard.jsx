@@ -19,11 +19,11 @@ function getInitials(name) {
 }
 
 const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg, #a855f7, #ec4899)',
-  'linear-gradient(135deg, #06b6d4, #3b82f6)',
-  'linear-gradient(135deg, #f59e0b, #ef4444)',
-  'linear-gradient(135deg, #10b981, #06b6d4)',
-  'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+  '#2F3B6B',
+  '#B0573D',
+  '#A8873A',
+  '#5D7A58',
+  '#6E5A4A',
 ];
 
 function getGradient(name) {
@@ -66,10 +66,10 @@ export default function PostCard({ post, currentUser }) {
             width: '44px', height: '44px', borderRadius: '50%',
             background: getGradient(post.authorName),
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '0.9rem', fontWeight: 700, color: 'white', fontFamily: 'Outfit',
+            fontSize: '1rem', fontWeight: 400, color: '#FBF8F3', fontFamily: 'var(--font-serif)',
             cursor: isExpert ? 'pointer' : 'default',
             flexShrink: 0,
-            boxShadow: isExpert ? '0 0 16px rgba(168,85,247,0.3)' : 'none',
+            boxShadow: isExpert ? '0 1px 2px rgba(43,38,34,0.06)' : 'none',
             transition: 'transform 0.2s, box-shadow 0.2s',
           }}
           title={isExpert ? `View ${post.authorName}'s profile` : undefined}
@@ -84,25 +84,25 @@ export default function PostCard({ post, currentUser }) {
               onClick={isExpert ? handleAuthorClick : undefined}
               style={{
                 background: 'none', border: 'none', padding: 0, cursor: isExpert ? 'pointer' : 'default',
-                fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: '0.95rem', color: '#f1f5f9',
+                fontFamily: 'var(--font-serif)', fontWeight: 500, fontSize: '1.08rem', color: '#2B2622',
                 textDecoration: 'none', transition: 'color 0.2s',
                 display: 'flex', alignItems: 'center', gap: '4px',
               }}
               title={isExpert ? `View ${post.authorName}'s profile` : undefined}
             >
               {post.authorName}
-              {isExpert && <ExternalLink size={12} color="#c084fc" />}
+              {isExpert && <ExternalLink size={12} color="#2F3B6B" />}
             </button>
             <span className={`badge ${isExpert ? 'badge-expert' : 'badge-learner'}`}>
               {post.role}
             </span>
             {isOwnPost && (
-              <span className="badge" style={{ background: 'rgba(100,116,139,0.15)', color: '#94a3b8', border: '1px solid rgba(100,116,139,0.3)' }}>
+              <span className="badge" style={{ background: 'rgba(122,111,99,0.15)', color: '#7A6F63', border: '1px solid rgba(122,111,99,0.3)' }}>
                 You
               </span>
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px', color: '#64748b', fontSize: '0.8rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px', color: '#7A6F63', fontSize: '0.8rem' }}>
             <Clock size={11} />
             <span>{timeAgo(post.timestamp)}</span>
           </div>
@@ -111,7 +111,7 @@ export default function PostCard({ post, currentUser }) {
 
       {/* Content */}
       <p style={{
-        color: '#cbd5e1', lineHeight: 1.65, fontSize: '0.95rem',
+        color: '#4A423B', lineHeight: 1.7, fontSize: '0.98rem',
         margin: '0 0 16px 0', whiteSpace: 'pre-wrap',
       }}>
         {post.content}
@@ -120,9 +120,9 @@ export default function PostCard({ post, currentUser }) {
       {/* Media */}
       {post.mediaUrl && !imageError && (
         <div style={{
-          borderRadius: '12px', overflow: 'hidden', marginBottom: '16px',
-          border: '1px solid rgba(255,255,255,0.06)',
-          background: imageLoaded ? 'transparent' : 'rgba(255,255,255,0.04)',
+          borderRadius: '16px', overflow: 'hidden', marginBottom: '16px',
+          border: '1px solid rgba(43,38,34,0.03)',
+          background: imageLoaded ? 'transparent' : 'rgba(43,38,34,0.03)',
           minHeight: imageLoaded ? 0 : '200px',
           position: 'relative',
         }}>
@@ -144,27 +144,27 @@ export default function PostCard({ post, currentUser }) {
 
       {/* Actions */}
       <div className="divider" style={{ margin: '12px 0' }} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap', rowGap: '8px' }}>
         <button
           onClick={handleLike}
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
-            padding: '6px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-            background: liked ? 'rgba(236,72,153,0.12)' : 'transparent',
-            color: liked ? '#f472b6' : '#64748b',
-            fontSize: '0.85rem', fontWeight: 500, fontFamily: 'Outfit',
+            padding: '6px 14px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+            background: liked ? 'rgba(176,87,61,0.12)' : 'transparent',
+            color: liked ? '#B0573D' : '#7A6F63',
+            fontSize: '0.85rem', fontWeight: 500, fontFamily: 'var(--font-sans)',
             transition: 'all 0.2s',
           }}
         >
-          <Heart size={15} fill={liked ? '#f472b6' : 'none'} />
+          <Heart size={15} fill={liked ? '#B0573D' : 'none'} />
           {likeCount}
         </button>
 
         <button style={{
           display: 'flex', alignItems: 'center', gap: '6px',
-          padding: '6px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-          background: 'transparent', color: '#64748b',
-          fontSize: '0.85rem', fontWeight: 500, fontFamily: 'Outfit',
+          padding: '6px 14px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+          background: 'transparent', color: '#7A6F63',
+          fontSize: '0.85rem', fontWeight: 500, fontFamily: 'var(--font-sans)',
           transition: 'all 0.2s',
         }}>
           <MessageCircle size={15} />
@@ -173,9 +173,9 @@ export default function PostCard({ post, currentUser }) {
 
         <button style={{
           display: 'flex', alignItems: 'center', gap: '6px',
-          padding: '6px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-          background: 'transparent', color: '#64748b',
-          fontSize: '0.85rem', fontWeight: 500, fontFamily: 'Outfit',
+          padding: '6px 14px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+          background: 'transparent', color: '#7A6F63',
+          fontSize: '0.85rem', fontWeight: 500, fontFamily: 'var(--font-sans)',
           transition: 'all 0.2s',
         }}>
           <Share2 size={15} />
@@ -188,9 +188,9 @@ export default function PostCard({ post, currentUser }) {
             style={{
               marginLeft: 'auto',
               display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '6px 16px', borderRadius: '8px', border: '1px solid rgba(168,85,247,0.3)', cursor: 'pointer',
-              background: 'rgba(168,85,247,0.08)', color: '#c084fc',
-              fontSize: '0.82rem', fontWeight: 600, fontFamily: 'Outfit',
+              padding: '7px 16px', borderRadius: '999px', border: '1px solid rgba(47,59,107,0.3)', cursor: 'pointer',
+              background: 'rgba(47,59,107,0.08)', color: '#2F3B6B',
+              fontSize: '0.82rem', fontWeight: 600, fontFamily: 'var(--font-sans)',
               transition: 'all 0.2s',
             }}
           >

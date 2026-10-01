@@ -25,23 +25,22 @@ export default function Navbar({ user, onLogout }) {
 
   return (
     <nav className="navbar">
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '68px' }}>
           {/* Logo */}
           <Link to={user ? '/feed' : '/'} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
-              width: '36px', height: '36px', borderRadius: '10px',
-              background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+              width: '34px', height: '34px', borderRadius: '11px',
+              background: '#2F3B6B', outline: '1px solid #A8873A', outlineOffset: '2px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(168,85,247,0.4)',
+              boxShadow: '0 1px 2px rgba(43,38,34,0.06)',
             }}>
-              <Sparkles size={18} color="white" />
+              <Sparkles size={16} color="#EADFC4" />
             </div>
             <span style={{
-              fontFamily: 'Outfit, sans-serif', fontWeight: 800,
-              fontSize: '1.3rem', letterSpacing: '-0.5px',
-              background: 'linear-gradient(135deg, #a855f7, #ec4899)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              fontFamily: 'var(--font-serif)', fontWeight: 500,
+              fontSize: '1.4rem', letterSpacing: '-0.01em',
+              color: '#2B2622',
             }}>
               Kalaverse
             </span>
@@ -54,18 +53,19 @@ export default function Navbar({ user, onLogout }) {
                 <Link
                   key={to}
                   to={to}
+                  className="nav-link"
                   style={{
                     display: 'flex', alignItems: 'center', gap: '6px',
-                    padding: '8px 16px', borderRadius: '10px', textDecoration: 'none',
-                    fontSize: '0.9rem', fontWeight: 500, fontFamily: 'Outfit, sans-serif',
+                    padding: '8px 16px', borderRadius: '999px', textDecoration: 'none',
+                    fontSize: '0.9rem', fontWeight: 500, fontFamily: 'var(--font-sans)',
                     transition: 'all 0.2s',
-                    background: isActive(to) ? 'rgba(168,85,247,0.15)' : 'transparent',
-                    color: isActive(to) ? '#c084fc' : '#94a3b8',
-                    border: isActive(to) ? '1px solid rgba(168,85,247,0.3)' : '1px solid transparent',
+                    background: isActive(to) ? '#2F3B6B' : 'transparent',
+                    color: isActive(to) ? '#FBF8F3' : '#7A6F63',
+                    border: isActive(to) ? '1px solid #2F3B6B' : '1px solid transparent',
                   }}
                 >
                   <Icon size={16} />
-                  {label}
+                  <span className="nav-collapse">{label}</span>
                 </Link>
               ))}
             </div>
@@ -79,21 +79,21 @@ export default function Navbar({ user, onLogout }) {
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: '8px',
                   padding: '6px 12px', borderRadius: '100px',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: '#FBF8F3',
+                  border: '1px solid #DDD2C0',
                 }}>
                   <div style={{
                     width: '28px', height: '28px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+                    background: '#2F3B6B',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '0.75rem', fontWeight: 700, color: 'white', fontFamily: 'Outfit',
+                    fontSize: '0.8rem', fontWeight: 500, color: '#FBF8F3', fontFamily: 'var(--font-serif)',
                   }}>
                     {user.name?.[0]?.toUpperCase() || '?'}
                   </div>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 500, color: '#e2e8f0', fontFamily: 'Outfit' }}>
+                  <span className="nav-collapse" style={{ fontSize: '0.85rem', fontWeight: 500, color: '#2B2622', fontFamily: 'var(--font-sans)' }}>
                     {user.name}
                   </span>
-                  <span className={`badge ${user.role === 'Expert' ? 'badge-expert' : 'badge-learner'}`}>
+                  <span className={`badge nav-collapse ${user.role === 'Expert' ? 'badge-expert' : 'badge-learner'}`}>
                     {user.role}
                   </span>
                 </div>
@@ -101,8 +101,8 @@ export default function Navbar({ user, onLogout }) {
                   onClick={handleLogout}
                   title="Exit Kalaverse"
                   style={{
-                    background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)',
-                    borderRadius: '10px', padding: '8px', cursor: 'pointer', color: '#f87171',
+                    background: 'rgba(166,61,47,0.1)', border: '1px solid rgba(166,61,47,0.25)',
+                    borderRadius: '999px', padding: '9px', cursor: 'pointer', color: '#A63D2F',
                     display: 'flex', alignItems: 'center', transition: 'all 0.2s',
                   }}
                 >

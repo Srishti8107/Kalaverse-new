@@ -13,12 +13,12 @@ import { buildFeedbackPayload, getCoachFeedback, hasGeminiConfig, COACH_MODEL } 
 import { getTutorialById, getPracticePath } from './index';
 
 /*
- * Palette (handloom indigo + paper + the craft's own green)
- *   neel   #1C2142  camera stage / ink
- *   paper  #F3F4F1  panel surface
- *   leaf   #3FBF6B  correct
- *   kumkum #E5556A  incorrect
- *   haldi  #EDB03D  uncertain
+ * Palette — Kalaverse "tradition meets modern" theme tokens (see index.css @theme)
+ *   indigo-night  camera stage, step tracker
+ *   sand-50/100   panels / page ground, ink for text
+ *   sage    #7FA07A  correct
+ *   clay    #C8664A  incorrect
+ *   gold    #C9A24A  uncertain
  */
 
 const REFERENCE_IMAGE = '/tutorials/paper-weaving-steps.jpeg'; // 2 × 3 collage of the expert's steps
@@ -27,16 +27,16 @@ const COACH_MIN_INTERVAL_MS = 3500; // don't send more often than this
 const PRIORITY_REASONS = new Set([REASON.STEP_COMPLETE, REASON.WEAVE_COMPLETE, REASON.ZONES_INCOMPLETE]);
 
 const RESULT_UI = {
-  correct: { label: 'On track', dot: 'bg-[#3FBF6B]', text: 'text-[#9BE3B3]', ring: 'ring-[#3FBF6B]/50' },
-  incorrect: { label: 'Needs a fix', dot: 'bg-[#E5556A]', text: 'text-[#F6A9B4]', ring: 'ring-[#E5556A]/50' },
-  uncertain: { label: 'Can’t see clearly', dot: 'bg-[#EDB03D]', text: 'text-[#F6D48F]', ring: 'ring-[#EDB03D]/50' },
+  correct: { label: 'On track', dot: 'bg-[#7FA07A]', text: 'text-[#C3D6BE]', ring: 'ring-[#7FA07A]/50' },
+  incorrect: { label: 'Needs a fix', dot: 'bg-[#C8664A]', text: 'text-[#EDBBA8]', ring: 'ring-[#C8664A]/50' },
+  uncertain: { label: 'Can’t see clearly', dot: 'bg-[#C9A24A]', text: 'text-[#E8D5A0]', ring: 'ring-[#C9A24A]/50' },
 };
 
 const TONE_UI = {
-  celebrate: 'border-[#3FBF6B] bg-[#3FBF6B]/10',
-  encourage: 'border-[#1C2142]/25 bg-white',
-  correct: 'border-[#E5556A] bg-[#E5556A]/[0.07]',
-  camera: 'border-[#EDB03D] bg-[#EDB03D]/10',
+  celebrate: 'border-[#7FA07A] bg-[#7FA07A]/10',
+  encourage: 'border-indigo-deep/40 bg-sand-50',
+  correct: 'border-[#C8664A] bg-[#C8664A]/[0.07]',
+  camera: 'border-[#C9A24A] bg-[#C9A24A]/10',
 };
 
 const SOURCE_LABEL = {
@@ -252,32 +252,32 @@ function PracticeSession({ tutorial }) {
   const isWeaveStep = step.key === 'ALTERNATE_WEAVE' || step.key === 'WEAVE_COMPLETE';
 
   return (
-    <div className="min-h-screen bg-[#E9EAE4] font-['Atkinson_Hyperlegible',system-ui,sans-serif] text-[#1C2142]">
-      <header className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-3 px-4 pb-5 pt-6 sm:px-6">
+    <div className="min-h-screen bg-sand-100 font-sans text-ink">
+      <header className="mx-auto flex max-w-[1120px] flex-wrap items-end justify-between gap-3 px-4 pb-8 pt-8 sm:px-6">
         <div>
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="mb-2 rounded text-sm font-semibold text-[#1C2142]/70 hover:text-[#1C2142] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#1C2142]"
+            className="mb-2 rounded text-sm font-semibold text-ink/70 hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-ink"
           >
             ← Back
           </button>
-          <p className="text-sm text-[#1C2142]/60">Kalaverse practice</p>
-          <h1 className="font-['Bricolage_Grotesque',system-ui,sans-serif] text-3xl font-bold tracking-tight sm:text-4xl">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold">Kalaverse practice</p>
+          <h1 className="font-serif text-4xl font-normal tracking-tight sm:text-5xl">
             {tutorial.title}
           </h1>
         </div>
-        <p className="flex items-center gap-2 text-sm text-[#1C2142]/70">
-          <span className={`h-2 w-2 rounded-full ${hasGeminiConfig() ? 'bg-[#3FBF6B]' : 'bg-[#EDB03D]'}`} />
+        <p className="flex items-center gap-2 text-sm text-ink/70">
+          <span className={`h-2 w-2 rounded-full ${hasGeminiConfig() ? 'bg-[#7FA07A]' : 'bg-[#C9A24A]'}`} />
           {hasGeminiConfig() ? 'AI coach connected' : 'AI coach offline'}
         </p>
       </header>
 
-      <main className="mx-auto grid max-w-7xl gap-6 px-4 pb-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_400px]">
+      <main className="mx-auto grid max-w-[1120px] gap-6 px-4 pb-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_400px]">
         {/* ------------------------- Camera stage ------------------------- */}
         <section aria-label="Camera practice area" className="min-w-0">
           <div
-            className={`relative w-full overflow-hidden rounded-[22px] bg-[#1C2142] ring-4 transition-[box-shadow] ${
+            className={`relative w-full overflow-hidden rounded-[24px] bg-indigo-night ring-4 transition-[box-shadow] ${
               phase === 'running' ? resultUi.ring : 'ring-transparent'
             }`}
             style={{ aspectRatio: aspect }}
@@ -296,14 +296,14 @@ function PracticeSession({ tutorial }) {
                 <div
                   role="status"
                   aria-live="polite"
-                  className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[#1C2142]/85 px-3 py-1.5 text-sm text-white backdrop-blur"
+                  className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-indigo-night/85 px-3 py-1.5 text-sm text-white backdrop-blur"
                 >
                   <span className={`h-2.5 w-2.5 rounded-full ${resultUi.dot}`} />
                   <span className={resultUi.text}>{resultUi.label}</span>
                 </div>
                 <div className="absolute inset-x-0 bottom-0 h-1.5 bg-white/10">
                   <div
-                    className="h-full bg-[#3FBF6B] transition-[width] duration-200"
+                    className="h-full bg-[#7FA07A] transition-[width] duration-200"
                     style={{ width: `${Math.round(frame.progress * 100)}%` }}
                   />
                 </div>
@@ -311,18 +311,18 @@ function PracticeSession({ tutorial }) {
             )}
 
             {phase !== 'running' && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center text-[#F3F4F1]">
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center text-sand-50">
                 {phase === 'loading' ? (
                   <>
-                    <span className="h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-[#3FBF6B] motion-reduce:animate-none" />
+                    <span className="h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-[#7FA07A] motion-reduce:animate-none" />
                     <p>Opening camera and loading hand tracking…</p>
                   </>
                 ) : (
                   <>
-                    <p className="max-w-md font-['Bricolage_Grotesque',system-ui,sans-serif] text-2xl font-semibold">
+                    <p className="max-w-md font-serif text-3xl font-normal">
                       {phase === 'error' ? 'Camera didn’t start' : 'Place your sheet in view, then start'}
                     </p>
-                    <p className="max-w-md text-[#F3F4F1]/75">
+                    <p className="max-w-md text-sand-50/75">
                       {phase === 'error'
                         ? error
                         : 'Point the camera down at your work surface. Video stays on your device; only short step results go to the coach.'}
@@ -330,7 +330,7 @@ function PracticeSession({ tutorial }) {
                     <button
                       type="button"
                       onClick={startCamera}
-                      className="rounded-full bg-[#3FBF6B] px-6 py-3 font-semibold text-[#1C2142] hover:bg-[#5ACB80] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-white"
+                      className="rounded-full bg-[#7FA07A] px-6 py-3 font-semibold text-ink hover:bg-[#93B38E] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
                       {phase === 'error' ? 'Try again' : 'Start camera'}
                     </button>
@@ -354,7 +354,7 @@ function PracticeSession({ tutorial }) {
           </div>
 
           {showDebug && (
-            <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 rounded-xl bg-[#1C2142] p-4 text-sm text-[#F3F4F1] sm:grid-cols-4">
+            <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 rounded-2xl bg-indigo-night p-4 text-sm text-sand-50 sm:grid-cols-4">
               <DebugItem label="Frame rate" value={`${debug.fps} fps`} />
               <DebugItem label="Hands seen" value={debug.hands} />
               <DebugItem
@@ -375,12 +375,12 @@ function PracticeSession({ tutorial }) {
             onSelect={goToStep}
           />
 
-          <article className="rounded-[22px] bg-[#F3F4F1] p-5">
+          <article className="rounded-[22px] border border-sand-300 bg-sand-50 p-6 shadow-[var(--shadow-soft)]">
             <div className="flex gap-4">
               <div
                 role="img"
                 aria-label={`Expert reference photo for step ${step.id}`}
-                className="aspect-[360/426] w-24 shrink-0 rounded-lg bg-no-repeat ring-1 ring-[#1C2142]/15"
+                className="aspect-[360/426] w-24 shrink-0 rounded-xl bg-no-repeat ring-1 ring-ink/15"
                 style={{
                   backgroundImage: `url(${REFERENCE_IMAGE})`,
                   backgroundSize: '200% 300%',
@@ -388,15 +388,15 @@ function PracticeSession({ tutorial }) {
                 }}
               />
               <div className="min-w-0">
-                <p className="text-sm text-[#1C2142]/60">
+                <p className="text-sm text-ink/60">
                   Step {step.id} of {STEPS.length}
                 </p>
-                <h2 className="font-['Bricolage_Grotesque',system-ui,sans-serif] text-xl font-semibold leading-tight">
+                <h2 className="font-serif text-2xl font-normal leading-tight">
                   {frame.finished ? 'Weave complete' : step.title}
                 </h2>
               </div>
             </div>
-            <p className="mt-4 leading-relaxed text-[#1C2142]/85">
+            <p className="mt-4 leading-relaxed text-ink/85">
               {frame.finished
                 ? 'Every column is filled and the checkerboard is done. Restart to practise again.'
                 : step.instruction}
@@ -416,7 +416,7 @@ function PracticeSession({ tutorial }) {
                     <span
                       key={i}
                       className={`h-3 w-3 rounded-[3px] ${
-                        i < frame.meta.alternations ? 'bg-[#3FBF6B]' : 'bg-[#1C2142]/15'
+                        i < frame.meta.alternations ? 'bg-[#7FA07A]' : 'bg-ink/15'
                       }`}
                     />
                   ))}
@@ -440,19 +440,19 @@ function PracticeSession({ tutorial }) {
 
 function PracticeUnavailable({ tutorial }) {
   return (
-    <div className="grid min-h-[70vh] place-items-center bg-[#E9EAE4] px-4 font-['Atkinson_Hyperlegible',system-ui,sans-serif] text-[#1C2142]">
-      <div className="max-w-md rounded-[22px] bg-[#F3F4F1] p-8 text-center">
-        <h1 className="font-['Bricolage_Grotesque',system-ui,sans-serif] text-2xl font-bold">
+    <div className="grid min-h-[70vh] place-items-center bg-sand-100 px-4 font-sans text-ink">
+      <div className="max-w-md rounded-[24px] border border-sand-300 bg-sand-50 p-10 shadow-[var(--shadow-soft)] text-center">
+        <h1 className="font-serif text-3xl font-normal">
           {tutorial ? 'AR practice isn’t ready yet' : 'Tutorial not found'}
         </h1>
-        <p className="mt-3 text-[#1C2142]/75">
+        <p className="mt-3 text-ink/75">
           {tutorial
             ? `“${tutorial.title}” doesn’t have live hand-tracking practice yet.`
             : 'This practice link doesn’t match any tutorial.'}
         </p>
         <Link
           to="/feed"
-          className="mt-6 inline-block rounded-full bg-[#1C2142] px-6 py-3 font-semibold text-[#F3F4F1] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#EDB03D]"
+          className="mt-6 inline-block rounded-full bg-indigo-deep px-6 py-3 font-semibold text-sand-50 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#C9A24A]"
         >
           Back to feed
         </Link>
@@ -464,12 +464,12 @@ function PracticeUnavailable({ tutorial }) {
 /** Six steps drawn as a woven strip: alternate tiles sit over/under the line. */
 function WovenStepTracker({ stepIndex, progress, finished, onSelect }) {
   return (
-    <nav aria-label="Lesson steps" className="rounded-[22px] bg-[#1C2142] px-5 pb-5 pt-4 text-[#F3F4F1]">
-      <p className="mb-3 text-sm text-[#F3F4F1]/70">
+    <nav aria-label="Lesson steps" className="rounded-[22px] bg-indigo-night px-6 pb-6 pt-5 text-sand-50">
+      <p className="mb-3 text-sm text-sand-50/70">
         {finished ? 'All six steps woven' : `Step ${stepIndex + 1}: in progress`}
       </p>
       <ol className="relative flex items-center justify-between">
-        <span aria-hidden="true" className="absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 rounded-full bg-[#F3F4F1]/15" />
+        <span aria-hidden="true" className="absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 rounded-full bg-sand-50/15" />
         {STEPS.map((s, i) => {
           const done = finished || i < stepIndex;
           const current = !finished && i === stepIndex;
@@ -481,20 +481,20 @@ function WovenStepTracker({ stepIndex, progress, finished, onSelect }) {
                 onClick={() => onSelect(i)}
                 aria-current={current ? 'step' : undefined}
                 aria-label={`Step ${s.id}: ${s.title}${done ? ' (done)' : ''}`}
-                className={`relative grid h-11 w-11 place-items-center overflow-hidden rounded-md text-sm font-bold focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#EDB03D] ${
+                className={`relative grid h-11 w-11 place-items-center overflow-hidden rounded-md text-sm font-bold focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#C9A24A] ${
                   over ? '-translate-y-1.5' : 'translate-y-1.5'
                 } ${
                   done
-                    ? 'bg-[#3FBF6B] text-[#1C2142]'
+                    ? 'bg-[#7FA07A] text-ink'
                     : current
-                      ? 'bg-[#F3F4F1] text-[#1C2142] ring-2 ring-[#3FBF6B]'
-                      : 'bg-[#F3F4F1]/20 text-[#F3F4F1]/80'
+                      ? 'bg-sand-50 text-ink ring-2 ring-[#7FA07A]'
+                      : 'bg-sand-50/20 text-sand-50/80'
                 }`}
               >
                 {current && (
                   <span
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 bg-[#3FBF6B]/45 transition-[height] duration-200"
+                    className="absolute inset-x-0 bottom-0 bg-[#7FA07A]/45 transition-[height] duration-200"
                     style={{ height: `${Math.round(progress * 100)}%` }}
                   />
                 )}
@@ -512,8 +512,8 @@ function WovenStepTracker({ stepIndex, progress, finished, onSelect }) {
 function ColumnMap({ completed, target }) {
   return (
     <div className="mt-5">
-      <p className="mb-2 text-sm text-[#1C2142]/60">Columns on your sheet</p>
-      <div className="flex flex-row-reverse justify-center gap-1.5 rounded-lg bg-white p-2 ring-1 ring-[#1C2142]/10">
+      <p className="mb-2 text-sm text-ink/60">Columns on your sheet</p>
+      <div className="flex flex-row-reverse justify-center gap-1.5 rounded-2xl bg-sand-100 p-3 ring-1 ring-sand-300">
         {COLUMN_ZONES.map((z) => {
           const done = completed.includes(z.index);
           const isTarget = z.index === target;
@@ -522,10 +522,10 @@ function ColumnMap({ completed, target }) {
               key={z.id}
               className={`flex h-16 w-9 items-end justify-center rounded-sm pb-1 text-xs font-semibold ${
                 done
-                  ? 'bg-[#3FBF6B] text-[#1C2142]'
+                  ? 'bg-[#7FA07A] text-ink'
                   : isTarget
-                    ? 'bg-[#3FBF6B]/15 text-[#1C2142] outline-dashed outline-2 outline-[#3FBF6B]'
-                    : 'bg-[#1C2142]/[0.06] text-[#1C2142]/50'
+                    ? 'bg-[#7FA07A]/15 text-ink outline-dashed outline-2 outline-[#7FA07A]'
+                    : 'bg-ink/[0.06] text-ink/50'
               }`}
             >
               {z.label}
@@ -542,16 +542,16 @@ function CoachBox({ coach, busy }) {
     <section
       aria-label="AI coach"
       aria-live="polite"
-      className={`rounded-[22px] border-l-[6px] p-5 transition-colors ${TONE_UI[coach.tone] ?? TONE_UI.encourage}`}
+      className={`rounded-[22px] border border-sand-300 border-l-[6px] p-6 shadow-[var(--shadow-soft)] transition-colors ${TONE_UI[coach.tone] ?? TONE_UI.encourage}`}
     >
       <div className="mb-2 flex items-center justify-between gap-3">
-        <h2 className="font-['Bricolage_Grotesque',system-ui,sans-serif] text-lg font-semibold">Kala, your coach</h2>
+        <h2 className="font-serif text-xl font-normal">Kala, your coach</h2>
         {busy && (
           <span className="flex items-center gap-1" aria-label="Coach is thinking">
             {[0, 1, 2].map((i) => (
               <span
                 key={i}
-                className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#1C2142]/50 motion-reduce:animate-none"
+                className="h-1.5 w-1.5 animate-bounce rounded-full bg-ink/50 motion-reduce:animate-none"
                 style={{ animationDelay: `${i * 120}ms` }}
               />
             ))}
@@ -559,8 +559,8 @@ function CoachBox({ coach, busy }) {
         )}
       </div>
       <p className="text-lg leading-snug">{coach.message}</p>
-      {coach.tip && <p className="mt-3 text-sm text-[#1C2142]/70">Tip: {coach.tip}</p>}
-      <p className="mt-4 text-xs text-[#1C2142]/50">{SOURCE_LABEL[coach.source] ?? SOURCE_LABEL.local}</p>
+      {coach.tip && <p className="mt-3 text-sm text-ink/70">Tip: {coach.tip}</p>}
+      <p className="mt-4 text-xs text-ink/50">{SOURCE_LABEL[coach.source] ?? SOURCE_LABEL.local}</p>
     </section>
   );
 }
@@ -571,10 +571,10 @@ function ControlButton({ onClick, pressed, children }) {
       type="button"
       onClick={onClick}
       aria-pressed={pressed}
-      className={`rounded-full px-4 py-2 text-sm font-semibold ring-1 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#EDB03D] ${
+      className={`rounded-full px-4 py-2 text-sm font-semibold ring-1 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#C9A24A] ${
         pressed
-          ? 'bg-[#1C2142] text-[#F3F4F1] ring-[#1C2142]'
-          : 'bg-[#F3F4F1] text-[#1C2142] ring-[#1C2142]/20 hover:bg-white'
+          ? 'bg-indigo-deep text-sand-50 ring-indigo-deep'
+          : 'bg-sand-50 text-ink ring-sand-300 hover:bg-white'
       }`}
     >
       {children}
@@ -585,7 +585,7 @@ function ControlButton({ onClick, pressed, children }) {
 function DebugItem({ label, value }) {
   return (
     <div className="min-w-0">
-      <dt className="text-[#F3F4F1]/55">{label}</dt>
+      <dt className="text-sand-50/55">{label}</dt>
       <dd className="truncate font-semibold">{value}</dd>
     </div>
   );

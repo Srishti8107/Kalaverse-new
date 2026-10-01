@@ -43,24 +43,24 @@ export default function CreatePostModal({ user, onClose, onPostCreated }) {
     <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div
         className="glass-card animate-fade-in-up"
-        style={{ width: '100%', maxWidth: '560px', padding: '28px' }}
+        style={{ width: '100%', maxWidth: '580px', padding: '32px', borderRadius: '24px', boxShadow: '0 30px 80px -30px rgba(43,38,34,0.45)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
           <div>
-            <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.3rem', margin: 0, color: '#f1f5f9' }}>
+            <h2 style={{ fontSize: '1.7rem', fontWeight: 400, margin: 0, color: '#2B2622' }}>
               Create Post
             </h2>
-            <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
+            <p style={{ color: '#7A6F63', fontSize: '0.85rem', margin: '4px 0 0' }}>
               Share your craft with the Kalaverse community
             </p>
           </div>
           <button
             onClick={onClose}
             style={{
-              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '8px', padding: '8px', cursor: 'pointer', color: '#94a3b8',
+              background: 'rgba(43,38,34,0.03)', border: '1px solid #DDD2C0',
+              borderRadius: '999px', padding: '8px', cursor: 'pointer', color: '#7A6F63',
               display: 'flex', alignItems: 'center', transition: 'all 0.2s',
             }}
           >
@@ -72,14 +72,14 @@ export default function CreatePostModal({ user, onClose, onPostCreated }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
           <div style={{
             width: '40px', height: '40px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+            background: '#2F3B6B',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '0.9rem', fontWeight: 700, color: 'white', fontFamily: 'Outfit', flexShrink: 0,
+            fontSize: '1rem', fontWeight: 400, color: '#FBF8F3', fontFamily: 'var(--font-serif)', flexShrink: 0,
           }}>
             {user?.name?.[0]?.toUpperCase() || '?'}
           </div>
           <div>
-            <div style={{ fontWeight: 600, fontFamily: 'Outfit', color: '#f1f5f9', fontSize: '0.95rem' }}>
+            <div style={{ fontWeight: 500, fontFamily: 'var(--font-serif)', color: '#2B2622', fontSize: '1.05rem' }}>
               {user?.name}
             </div>
             <span className={`badge ${user?.role === 'Expert' ? 'badge-expert' : 'badge-learner'}`}>
@@ -104,7 +104,7 @@ export default function CreatePostModal({ user, onClose, onPostCreated }) {
             />
             <div style={{
               position: 'absolute', bottom: '10px', right: '12px',
-              fontSize: '0.75rem', color: charCount > maxChars * 0.9 ? '#f59e0b' : '#64748b',
+              fontSize: '0.75rem', color: charCount > maxChars * 0.9 ? '#A8873A' : '#7A6F63',
             }}>
               {charCount}/{maxChars}
             </div>
@@ -116,11 +116,11 @@ export default function CreatePostModal({ user, onClose, onPostCreated }) {
             onClick={() => setShowMediaInput(!showMediaInput)}
             style={{
               display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '6px 14px', borderRadius: '8px',
-              border: showMediaInput ? '1px solid rgba(168,85,247,0.4)' : '1px solid rgba(255,255,255,0.1)',
-              background: showMediaInput ? 'rgba(168,85,247,0.1)' : 'transparent',
-              color: showMediaInput ? '#c084fc' : '#64748b',
-              fontSize: '0.85rem', fontWeight: 500, fontFamily: 'Outfit', cursor: 'pointer',
+              padding: '6px 14px', borderRadius: '999px',
+              border: showMediaInput ? '1px solid rgba(47,59,107,0.4)' : '1px solid #DDD2C0',
+              background: showMediaInput ? 'rgba(47,59,107,0.1)' : 'transparent',
+              color: showMediaInput ? '#2F3B6B' : '#7A6F63',
+              fontSize: '0.85rem', fontWeight: 500, fontFamily: 'var(--font-sans)', cursor: 'pointer',
               transition: 'all 0.2s', marginBottom: '12px',
             }}
           >
@@ -140,7 +140,7 @@ export default function CreatePostModal({ user, onClose, onPostCreated }) {
                 style={{ marginBottom: '8px' }}
               />
               {mediaUrl && (
-                <div style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #DDD2C0' }}>
                   <img
                     src={mediaUrl}
                     alt="Preview"
@@ -157,8 +157,8 @@ export default function CreatePostModal({ user, onClose, onPostCreated }) {
             <div style={{
               display: 'flex', alignItems: 'center', gap: '8px',
               padding: '12px 16px', borderRadius: '10px', marginBottom: '16px',
-              background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)',
-              color: '#f87171', fontSize: '0.85rem',
+              background: 'rgba(166,61,47,0.1)', border: '1px solid rgba(166,61,47,0.25)',
+              color: '#A63D2F', fontSize: '0.85rem',
             }}>
               <AlertCircle size={16} />
               {error}

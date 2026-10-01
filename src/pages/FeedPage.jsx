@@ -96,15 +96,15 @@ export default function FeedPage({ user }) {
       {/* Page header */}
       <div style={{
         borderBottom: '1px solid var(--color-border)',
-        background: 'rgba(10,10,15,0.8)', backdropFilter: 'blur(20px)',
-        position: 'sticky', top: '64px', zIndex: 50,
+        background: 'rgba(243,238,229,0.88)', backdropFilter: 'blur(20px)',
+        position: 'sticky', top: '68px', zIndex: 50,
       }}>
-        <div className="container" style={{ padding: '16px 20px' }}>
+        <div className="container container-narrow" style={{ paddingTop: '20px', paddingBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
             {/* Title */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-              <Rss size={18} color="#a855f7" />
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontFamily: 'Outfit' }}>Community Feed</h2>
+              <Rss size={17} color="#A8873A" />
+              <h2 style={{ margin: 0, fontSize: '1.6rem', fontWeight: 400 }}>Community Feed</h2>
             </div>
 
             {/* Refresh */}
@@ -113,8 +113,8 @@ export default function FeedPage({ user }) {
               disabled={refreshing}
               style={{
                 background: 'transparent', border: '1px solid var(--color-border)',
-                borderRadius: '8px', padding: '6px 10px', cursor: 'pointer',
-                color: '#64748b', display: 'flex', alignItems: 'center',
+                borderRadius: '999px', padding: '8px 10px', cursor: 'pointer',
+                color: '#7A6F63', display: 'flex', alignItems: 'center',
                 transition: 'all 0.2s',
               }}
             >
@@ -137,7 +137,7 @@ export default function FeedPage({ user }) {
           <div style={{ display: 'flex', gap: '10px', marginTop: '12px', flexWrap: 'wrap' }}>
             {/* Search */}
             <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-              <Search size={15} color="#64748b" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+              <Search size={15} color="#7A6F63" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
               <input
                 id="feed-search"
                 type="text"
@@ -145,12 +145,12 @@ export default function FeedPage({ user }) {
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Search posts..."
                 className="input-field"
-                style={{ paddingLeft: '36px', padding: '8px 12px 8px 36px', fontSize: '0.875rem' }}
+                style={{ paddingLeft: '36px', padding: '9px 14px 9px 38px', fontSize: '0.875rem', borderRadius: '999px' }}
               />
             </div>
 
             {/* Filter tabs */}
-            <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '4px', border: '1px solid var(--color-border)' }}>
+            <div style={{ display: 'flex', gap: '4px', background: '#FBF8F3', borderRadius: '999px', padding: '4px', border: '1px solid var(--color-border)' }}>
               {[
                 { key: 'all', label: 'All' },
                 { key: 'experts', label: 'Experts' },
@@ -160,11 +160,11 @@ export default function FeedPage({ user }) {
                   key={key}
                   onClick={() => setFilter(key)}
                   style={{
-                    padding: '5px 14px', borderRadius: '7px', border: 'none', cursor: 'pointer',
-                    fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.82rem',
+                    padding: '6px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+                    fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.82rem',
                     transition: 'all 0.2s',
-                    background: filter === key ? 'rgba(168,85,247,0.2)' : 'transparent',
-                    color: filter === key ? '#c084fc' : '#64748b',
+                    background: filter === key ? '#2F3B6B' : 'transparent',
+                    color: filter === key ? '#FBF8F3' : '#7A6F63',
                   }}
                 >
                   {label}
@@ -176,14 +176,14 @@ export default function FeedPage({ user }) {
       </div>
 
       {/* Feed */}
-      <div className="container" style={{ padding: '24px 20px' }}>
+      <div className="container container-narrow" style={{ paddingTop: '32px', paddingBottom: '64px' }}>
         {/* Error banner */}
         {error && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: '10px',
-            padding: '12px 16px', borderRadius: '12px', marginBottom: '20px',
-            background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.25)',
-            color: '#fbbf24', fontSize: '0.85rem',
+            padding: '12px 16px', borderRadius: '14px', marginBottom: '24px',
+            background: 'rgba(168,135,58,0.08)', border: '1px solid rgba(168,135,58,0.25)',
+            color: '#8A6D2A', fontSize: '0.85rem',
           }}>
             <AlertCircle size={16} />
             {error}
@@ -194,7 +194,7 @@ export default function FeedPage({ user }) {
           // Skeleton
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {[1, 2, 3].map(i => (
-              <div key={i} style={{ borderRadius: '16px', padding: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-glass)' }}>
+              <div key={i} style={{ borderRadius: '20px', padding: '24px', border: '1px solid var(--color-border)', background: 'var(--color-bg-glass)' }}>
                 <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
                   <div className="skeleton" style={{ width: '44px', height: '44px', borderRadius: '50%', flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
@@ -211,14 +211,14 @@ export default function FeedPage({ user }) {
         ) : filteredPosts.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 20px' }}>
             <div style={{
-              width: '64px', height: '64px', borderRadius: '18px',
-              background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.2)',
+              width: '64px', height: '64px', borderRadius: '50%',
+              background: 'rgba(47,59,107,0.1)', border: '1px solid rgba(47,59,107,0.2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px',
             }}>
-              <Rss size={28} color="#a855f7" />
+              <Rss size={28} color="#2F3B6B" />
             </div>
-            <h3 style={{ fontFamily: 'Outfit', color: '#f1f5f9', marginBottom: '8px' }}>No posts found</h3>
-            <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 400, color: '#2B2622', marginBottom: '8px' }}>No posts found</h3>
+            <p style={{ color: '#7A6F63', fontSize: '0.9rem', marginBottom: '20px' }}>
               {searchQuery ? 'Try a different search term.' : 'Be the first to post in the community!'}
             </p>
             <button onClick={() => setShowModal(true)} className="btn-primary">
@@ -226,7 +226,7 @@ export default function FeedPage({ user }) {
             </button>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
             {filteredPosts.map((post, idx) => (
               <div key={post.id} style={{ animationDelay: `${idx * 0.05}s` }}>
                 <PostCard post={post} currentUser={user} />

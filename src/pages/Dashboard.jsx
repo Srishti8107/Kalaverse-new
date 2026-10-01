@@ -7,68 +7,68 @@ import { TUTORIALS, getPracticePath } from '../tutorials';
 const AR_TUTORIALS = TUTORIALS.filter((t) => getPracticePath(t));
 
 const STAT_COLORS = {
-  purple: { bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.25)', text: '#c084fc', icon: '#a855f7' },
-  cyan:   { bg: 'rgba(6,182,212,0.12)',  border: 'rgba(6,182,212,0.25)',  text: '#22d3ee', icon: '#06b6d4' },
-  amber:  { bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.25)', text: '#fbbf24', icon: '#f59e0b' },
-  green:  { bg: 'rgba(34,197,94,0.12)',  border: 'rgba(34,197,94,0.25)',  text: '#4ade80', icon: '#22c55e' },
+  purple: { bg: 'rgba(47,59,107,0.12)', border: 'rgba(47,59,107,0.25)', text: '#2F3B6B', icon: '#2F3B6B' },
+  cyan:   { bg: 'rgba(176,87,61,0.12)',  border: 'rgba(176,87,61,0.25)',  text: '#B0573D', icon: '#B0573D' },
+  amber:  { bg: 'rgba(168,135,58,0.12)', border: 'rgba(168,135,58,0.25)', text: '#A8873A', icon: '#A8873A' },
+  green:  { bg: 'rgba(93,122,88,0.12)',  border: 'rgba(93,122,88,0.25)',  text: '#5D7A58', icon: '#5D7A58' },
 };
 
 function StatCard({ label, value, icon: Icon, color }) {
   const c = STAT_COLORS[color] || STAT_COLORS.purple;
   return (
     <div style={{
-      background: c.bg, border: `1px solid ${c.border}`,
-      borderRadius: '14px', padding: '20px',
+      background: '#FBF8F3', border: '1px solid #DDD2C0', borderTop: `3px solid ${c.icon}`,
+      borderRadius: '18px', padding: '22px',
       display: 'flex', alignItems: 'center', gap: '16px',
-      transition: 'transform 0.2s, box-shadow 0.2s',
+      boxShadow: 'var(--shadow-soft)',
     }}>
       <div style={{
-        width: '48px', height: '48px', borderRadius: '12px',
-        background: `${c.icon}20`,
+        width: '44px', height: '44px', borderRadius: '50%',
+        background: c.bg, border: `1px solid ${c.border}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
       }}>
-        <Icon size={22} color={c.icon} />
+        <Icon size={19} color={c.icon} />
       </div>
       <div>
-        <div style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: 'Outfit', color: '#f1f5f9' }}>{value}</div>
-        <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '2px' }}>{label}</div>
+        <div style={{ fontSize: '1.9rem', fontWeight: 400, fontFamily: 'var(--font-serif)', color: '#2B2622', lineHeight: 1.1 }}>{value}</div>
+        <div style={{ fontSize: '0.75rem', color: '#7A6F63', marginTop: '4px', letterSpacing: '0.04em' }}>{label}</div>
       </div>
     </div>
   );
 }
 
-function QuickAction({ label, description, icon: Icon, onClick, color = '#a855f7' }) {
+function QuickAction({ label, description, icon: Icon, onClick, color = '#2F3B6B' }) {
   return (
     <button
       onClick={onClick}
       style={{
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: '14px', padding: '20px', cursor: 'pointer', textAlign: 'left', width: '100%',
+        background: '#FBF8F3', border: '1px solid #DDD2C0',
+        borderRadius: '18px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
         transition: 'all 0.25s', display: 'flex', alignItems: 'center', gap: '16px',
       }}
       onMouseOver={e => {
         e.currentTarget.style.borderColor = `${color}50`;
-        e.currentTarget.style.background = `${color}08`;
+        e.currentTarget.style.background = '#FFFDF9';
         e.currentTarget.style.transform = 'translateX(4px)';
       }}
       onMouseOut={e => {
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
-        e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+        e.currentTarget.style.borderColor = '#DDD2C0';
+        e.currentTarget.style.background = '#FBF8F3';
         e.currentTarget.style.transform = 'translateX(0)';
       }}
     >
       <div style={{
-        width: '44px', height: '44px', borderRadius: '12px',
-        background: `${color}18`,
+        width: '42px', height: '42px', borderRadius: '50%',
+        background: `${color}14`, border: `1px solid ${color}33`,
         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
       }}>
-        <Icon size={20} color={color} />
+        <Icon size={18} color={color} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: 'Outfit', fontWeight: 600, color: '#f1f5f9', fontSize: '0.95rem' }}>{label}</div>
-        <div style={{ color: '#64748b', fontSize: '0.82rem', marginTop: '2px' }}>{description}</div>
+        <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, color: '#2B2622', fontSize: '0.95rem' }}>{label}</div>
+        <div style={{ color: '#7A6F63', fontSize: '0.82rem', marginTop: '2px' }}>{description}</div>
       </div>
-      <ArrowRight size={16} color="#475569" />
+      <ArrowRight size={16} color="#A39887" />
     </button>
   );
 }
@@ -76,26 +76,26 @@ function QuickAction({ label, description, icon: Icon, onClick, color = '#a855f7
 function PracticeCard({ tutorial, onStart }) {
   return (
     <div className="tutorial-card" onClick={onStart} style={{ cursor: 'pointer' }}>
-      <div style={{ height: '140px', overflow: 'hidden', background: 'rgba(255,255,255,0.04)' }}>
+      <div style={{ height: '220px', overflow: 'hidden', background: '#E9E1D3', borderBottom: '1px solid #DDD2C0' }}>
         {tutorial.thumbnail && (
           <img
             src={tutorial.thumbnail}
             alt=""
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
           />
         )}
       </div>
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: '20px 22px 22px' }}>
         <span className="badge badge-free" style={{ marginBottom: '8px' }}>
           <Sparkles size={10} /> Live AR practice
         </span>
-        <h4 style={{ fontFamily: 'Outfit', fontSize: '0.95rem', color: '#f1f5f9', margin: '8px 0 6px', lineHeight: 1.4 }}>
+        <h4 style={{ fontSize: '1.3rem', color: '#2B2622', margin: '12px 0 8px', lineHeight: 1.25 }}>
           {tutorial.title}
         </h4>
-        <p style={{ color: '#64748b', fontSize: '0.82rem', lineHeight: 1.5, margin: '0 0 12px' }}>
+        <p style={{ color: '#4A423B', fontSize: '0.88rem', lineHeight: 1.6, margin: '0 0 14px' }}>
           {tutorial.description}
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '0.78rem', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#7A6F63', fontSize: '0.78rem', marginBottom: '16px' }}>
           <Clock size={12} />
           {tutorial.duration}
         </div>
@@ -106,9 +106,9 @@ function PracticeCard({ tutorial, onStart }) {
             onStart();
           }}
           style={{
-            width: '100%', padding: '10px', borderRadius: '10px', border: 'none', cursor: 'pointer',
-            background: 'linear-gradient(135deg, #a855f7, #ec4899)', color: 'white',
-            fontFamily: 'Outfit', fontWeight: 600, fontSize: '0.875rem',
+            width: '100%', padding: '11px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+            background: '#2F3B6B', color: '#FBF8F3',
+            fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.875rem',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
           }}
         >
@@ -128,25 +128,26 @@ export default function Dashboard({ user }) {
     <div style={{ minHeight: '100vh', background: 'var(--color-bg-primary)' }}>
       {/* Hero banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(168,85,247,0.1) 0%, rgba(236,72,153,0.07) 50%, rgba(6,182,212,0.05) 100%)',
-        borderBottom: '1px solid var(--color-border)', padding: '40px 0',
+        background: 'var(--color-sand-50)',
+        borderBottom: '1px solid var(--color-border)', padding: '56px 0 48px',
         position: 'relative', overflow: 'hidden',
       }}>
         <div className="glow-orb glow-orb-purple" style={{ width: '400px', height: '400px', top: '-200px', right: '-100px', opacity: 0.4 }} />
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
             <div style={{
-              width: '64px', height: '64px', borderRadius: '18px',
-              background: isExpert ? 'linear-gradient(135deg, #a855f7, #ec4899)' : 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+              width: '76px', height: '76px', borderRadius: '50%', flexShrink: 0,
+              outline: '1px solid #A8873A', outlineOffset: '4px',
+              background: isExpert ? '#2F3B6B' : '#B0573D',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: isExpert ? '0 0 30px rgba(168,85,247,0.4)' : '0 0 30px rgba(6,182,212,0.4)',
-              fontSize: '1.4rem', fontWeight: 800, color: 'white', fontFamily: 'Outfit',
+              fontSize: '1.9rem', fontWeight: 400, color: '#FBF8F3', fontFamily: 'var(--font-serif)',
             }}>
               {user?.name?.[0]?.toUpperCase() || '?'}
             </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <h1 style={{ fontSize: '1.75rem', margin: 0 }}>
+              <p className="eyebrow" style={{ margin: '0 0 8px' }}>{isExpert ? 'Artisan studio' : 'Learner studio'}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <h1 style={{ fontSize: '2.4rem', margin: 0, fontWeight: 400 }}>
                   Welcome back, <span className="gradient-text">{user?.name}</span>!
                 </h1>
                 <span className={`badge ${isExpert ? 'badge-expert' : 'badge-learner'}`}>
@@ -154,7 +155,7 @@ export default function Dashboard({ user }) {
                   {user?.role}
                 </span>
               </div>
-              <p style={{ color: '#64748b', margin: '6px 0 0', fontSize: '0.9rem' }}>
+              <p style={{ color: '#7A6F63', margin: '10px 0 0', fontSize: '0.95rem' }}>
                 {isExpert
                   ? `Sharing ${user?.expertise || 'your craft'} with the Kalaverse`
                   : 'Continue your craft learning journey'}
@@ -164,9 +165,9 @@ export default function Dashboard({ user }) {
         </div>
       </div>
 
-      <div className="container" style={{ padding: '32px 20px' }}>
+      <div className="container" style={{ paddingTop: '40px', paddingBottom: '64px' }}>
         {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '18px', marginBottom: '48px' }}>
           {isExpert ? (
             <>
               <StatCard label="Tutorials" value="0" icon={BookOpen} color="purple" />
@@ -185,10 +186,10 @@ export default function Dashboard({ user }) {
         </div>
 
         {/* Quick Actions */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '40px' }}>
           {/* Left: Actions */}
           <div>
-            <h3 style={{ fontSize: '1rem', fontFamily: 'Outfit', color: '#94a3b8', fontWeight: 600, marginBottom: '16px', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
+            <h3 className="eyebrow" style={{ margin: '0 0 16px', paddingBottom: '12px', borderBottom: '1px solid #DDD2C0' }}>
               Quick Actions
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -197,7 +198,7 @@ export default function Dashboard({ user }) {
                 description="Browse posts from the community"
                 icon={Rss}
                 onClick={() => navigate('/feed')}
-                color="#a855f7"
+                color="#2F3B6B"
               />
               {!isExpert && AR_TUTORIALS[0] && (
                 <QuickAction
@@ -205,7 +206,7 @@ export default function Dashboard({ user }) {
                   description={`Practise ${AR_TUTORIALS[0].title} with your camera and an AI coach`}
                   icon={Hand}
                   onClick={() => navigate(getPracticePath(AR_TUTORIALS[0]))}
-                  color="#22c55e"
+                  color="#5D7A58"
                 />
               )}
               {isExpert && (
@@ -214,7 +215,7 @@ export default function Dashboard({ user }) {
                   description="See how learners see your profile"
                   icon={User}
                   onClick={() => navigate(`/expert/${user.id}`)}
-                  color="#ec4899"
+                  color="#B0573D"
                 />
               )}
               <QuickAction
@@ -222,34 +223,34 @@ export default function Dashboard({ user }) {
                 description={isExpert ? 'View your AR tutorial stubs' : 'Discover expert tutorials'}
                 icon={BookOpen}
                 onClick={() => navigate('/feed')}
-                color="#f59e0b"
+                color="#A8873A"
               />
             </div>
           </div>
 
           {/* Right: Profile summary */}
           <div>
-            <h3 style={{ fontSize: '0.8rem', fontFamily: 'Outfit', color: '#94a3b8', fontWeight: 600, marginBottom: '16px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            <h3 className="eyebrow" style={{ margin: '0 0 16px', paddingBottom: '12px', borderBottom: '1px solid #DDD2C0' }}>
               Your Profile
             </h3>
-            <div className="glass-card" style={{ padding: '20px' }}>
+            <div className="glass-card" style={{ padding: '24px' }}>
               {user?.bio ? (
-                <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6, margin: '0 0 16px' }}>{user.bio}</p>
+                <p style={{ color: '#4A423B', fontFamily: 'var(--font-serif)', fontSize: '1.05rem', lineHeight: 1.65, margin: '0 0 16px' }}>{user.bio}</p>
               ) : (
-                <p style={{ color: '#475569', fontSize: '0.9rem', fontStyle: 'italic', margin: '0 0 16px' }}>
+                <p style={{ color: '#A39887', fontSize: '0.9rem', fontStyle: 'italic', margin: '0 0 16px' }}>
                   No bio added yet.
                 </p>
               )}
 
               {isExpert && user?.expertise && (
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, display: 'block', marginBottom: '4px' }}>CRAFT</span>
+                  <span className="eyebrow" style={{ display: 'block', marginBottom: '6px' }}>CRAFT</span>
                   <span className="badge badge-expert">{user.expertise}</span>
                 </div>
               )}
 
               {(user?.contact?.email || user?.contact?.mobile) && (
-                <div style={{ fontSize: '0.82rem', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ fontSize: '0.82rem', color: '#7A6F63', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   {user.contact.email && <span>✉ {user.contact.email}</span>}
                   {user.contact.mobile && <span>📞 {user.contact.mobile}</span>}
                 </div>
@@ -271,14 +272,14 @@ export default function Dashboard({ user }) {
 
         {/* AR Practice */}
         {AR_TUTORIALS.length > 0 && (
-          <section style={{ marginTop: '40px' }} aria-labelledby="ar-practice-heading">
-            <h3 id="ar-practice-heading" style={{ fontSize: '0.8rem', fontFamily: 'Outfit', color: '#94a3b8', fontWeight: 600, margin: '0 0 6px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          <section style={{ marginTop: '64px', paddingTop: '40px', borderTop: '1px solid #DDD2C0' }} aria-labelledby="ar-practice-heading">
+            <h3 id="ar-practice-heading" style={{ fontSize: '2rem', fontWeight: 400, margin: '0 0 8px' }}>
               AR Practice
             </h3>
-            <p style={{ color: '#64748b', fontSize: '0.875rem', margin: '0 0 16px' }}>
+            <p style={{ color: '#7A6F63', fontSize: '0.95rem', margin: '0 0 28px', maxWidth: '560px' }}>
               Practise with your camera: hand tracking checks each step and an AI coach guides you.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: '28px' }}>
               {AR_TUTORIALS.map((tutorial) => (
                 <PracticeCard
                   key={tutorial.id}

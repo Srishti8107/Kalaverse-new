@@ -54,11 +54,11 @@ export default function App() {
     return (
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: '#0a0a0f',
+        background: 'var(--color-sand-100)',
       }}>
         <div style={{
           width: '48px', height: '48px', borderRadius: '12px',
-          background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+          background: '#2F3B6B',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           animation: 'orb-pulse 1.5s ease-in-out infinite alternate',
         }}>

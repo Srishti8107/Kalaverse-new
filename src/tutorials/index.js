@@ -12,7 +12,7 @@ export const TUTORIALS = [
     description: 'Weave green strips through a slit paper sheet in six guided steps, with live hand tracking and an AI coach.',
     duration: '20 min',
     type: 'free',
-    thumbnail: '/tutorials/paper-weaving-steps.jpeg',
+    thumbnail: '/tutorials/paper-weaving-cover.jpg',
     studentsCount: 212,
     rating: 4.9,
     arPractice: true,
