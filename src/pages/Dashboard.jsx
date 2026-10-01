@@ -1,285 +1,311 @@
 // src/pages/Dashboard.jsx
 // Shared dashboard component for both Expert and Learner roles
+import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Rss, User, Wand2, GraduationCap, ArrowRight, Sparkles, BookOpen, Users, Star, Hand, Clock } from 'lucide-react';
+import {
+  Rss, User, Wand2, GraduationCap, ArrowRight, Sparkles, BookOpen, Users, Star, Hand, Clock,
+  ChevronRight, Mail, Phone,
+} from 'lucide-react';
 import { TUTORIALS, getPracticePath } from '../tutorials';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { BlockPrintBand, Jaali, OrnamentDivider, Rosette } from '@/components/ornaments';
 
 const AR_TUTORIALS = TUTORIALS.filter((t) => getPracticePath(t));
 
-const STAT_COLORS = {
-  purple: { bg: 'rgba(47,59,107,0.12)', border: 'rgba(47,59,107,0.25)', text: '#2F3B6B', icon: '#2F3B6B' },
-  cyan:   { bg: 'rgba(176,87,61,0.12)',  border: 'rgba(176,87,61,0.25)',  text: '#B0573D', icon: '#B0573D' },
-  amber:  { bg: 'rgba(168,135,58,0.12)', border: 'rgba(168,135,58,0.25)', text: '#A8873A', icon: '#A8873A' },
-  green:  { bg: 'rgba(93,122,88,0.12)',  border: 'rgba(93,122,88,0.25)',  text: '#5D7A58', icon: '#5D7A58' },
+// Each tone is a natural dye: indigo, madder/terracotta, turmeric-gold, leaf.
+const TONES = {
+  indigo: { hex: '#2F3B6B', icon: 'text-[#2F3B6B] bg-[#2F3B6B]/8 ring-[#2F3B6B]/20' },
+  terracotta: { hex: '#B0573D', icon: 'text-[#B0573D] bg-[#B0573D]/8 ring-[#B0573D]/20' },
+  gold: { hex: '#A8873A', icon: 'text-[#8A6D2A] bg-[#A8873A]/10 ring-[#A8873A]/25' },
+  sage: { hex: '#5D7A58', icon: 'text-[#5D7A58] bg-[#5D7A58]/8 ring-[#5D7A58]/20' },
 };
 
-function StatCard({ label, value, icon: Icon, color }) {
-  const c = STAT_COLORS[color] || STAT_COLORS.purple;
+function StatCard({ label, value, icon: Icon, tone }) {
+  const t = TONES[tone];
   return (
-    <div style={{
-      background: '#FBF8F3', border: '1px solid #DDD2C0', borderTop: `3px solid ${c.icon}`,
-      borderRadius: '18px', padding: '22px',
-      display: 'flex', alignItems: 'center', gap: '16px',
-      boxShadow: 'var(--shadow-soft)',
-    }}>
-      <div style={{
-        width: '44px', height: '44px', borderRadius: '50%',
-        background: c.bg, border: `1px solid ${c.border}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-      }}>
-        <Icon size={19} color={c.icon} />
-      </div>
-      <div>
-        <div style={{ fontSize: '1.9rem', fontWeight: 400, fontFamily: 'var(--font-serif)', color: '#2B2622', lineHeight: 1.1 }}>{value}</div>
-        <div style={{ fontSize: '0.75rem', color: '#7A6F63', marginTop: '4px', letterSpacing: '0.04em' }}>{label}</div>
-      </div>
-    </div>
+    <Card className="gap-0 overflow-hidden py-0 shadow-[var(--shadow-soft)]">
+      <CardContent className="flex items-center gap-4 p-5">
+        <span className={`grid size-11 shrink-0 place-items-center rounded-full ring-1 ${t.icon}`}>
+          <Icon className="size-[18px]" strokeWidth={1.75} />
+        </span>
+        <div className="min-w-0">
+          <div className="font-serif text-3xl leading-none text-foreground">{value}</div>
+          <div className="mt-1.5 text-xs tracking-wide text-muted-foreground">{label}</div>
+        </div>
+      </CardContent>
+      <BlockPrintBand height={8} primary={t.hex} secondary={`${t.hex}66`} className="opacity-80" />
+    </Card>
   );
 }
 
-function QuickAction({ label, description, icon: Icon, onClick, color = '#2F3B6B' }) {
+function ActionRow({ label, description, icon: Icon, onClick, tone }) {
   return (
     <button
+      type="button"
       onClick={onClick}
-      style={{
-        background: '#FBF8F3', border: '1px solid #DDD2C0',
-        borderRadius: '18px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', width: '100%',
-        transition: 'all 0.25s', display: 'flex', alignItems: 'center', gap: '16px',
-      }}
-      onMouseOver={e => {
-        e.currentTarget.style.borderColor = `${color}50`;
-        e.currentTarget.style.background = '#FFFDF9';
-        e.currentTarget.style.transform = 'translateX(4px)';
-      }}
-      onMouseOut={e => {
-        e.currentTarget.style.borderColor = '#DDD2C0';
-        e.currentTarget.style.background = '#FBF8F3';
-        e.currentTarget.style.transform = 'translateX(0)';
-      }}
+      className="group flex w-full items-center gap-4 rounded-xl px-3 py-3.5 text-left transition-colors hover:bg-accent/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
-      <div style={{
-        width: '42px', height: '42px', borderRadius: '50%',
-        background: `${color}14`, border: `1px solid ${color}33`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-      }}>
-        <Icon size={18} color={color} />
-      </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, color: '#2B2622', fontSize: '0.95rem' }}>{label}</div>
-        <div style={{ color: '#7A6F63', fontSize: '0.82rem', marginTop: '2px' }}>{description}</div>
-      </div>
-      <ArrowRight size={16} color="#A39887" />
+      <span className={`grid size-10 shrink-0 place-items-center rounded-full ring-1 ${TONES[tone].icon}`}>
+        <Icon className="size-[17px]" strokeWidth={1.75} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-medium text-foreground">{label}</span>
+        <span className="mt-0.5 block text-sm text-muted-foreground">{description}</span>
+      </span>
+      <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
     </button>
   );
 }
 
 function PracticeCard({ tutorial, onStart }) {
   return (
-    <div className="tutorial-card" onClick={onStart} style={{ cursor: 'pointer' }}>
-      <div style={{ height: '220px', overflow: 'hidden', background: '#E9E1D3', borderBottom: '1px solid #DDD2C0' }}>
-        {tutorial.thumbnail && (
-          <img
-            src={tutorial.thumbnail}
-            alt=""
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
-          />
-        )}
-      </div>
-      <div style={{ padding: '20px 22px 22px' }}>
-        <span className="badge badge-free" style={{ marginBottom: '8px' }}>
-          <Sparkles size={10} /> Live AR practice
-        </span>
-        <h4 style={{ fontSize: '1.3rem', color: '#2B2622', margin: '12px 0 8px', lineHeight: 1.25 }}>
-          {tutorial.title}
-        </h4>
-        <p style={{ color: '#4A423B', fontSize: '0.88rem', lineHeight: 1.6, margin: '0 0 14px' }}>
-          {tutorial.description}
-        </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#7A6F63', fontSize: '0.78rem', marginBottom: '16px' }}>
-          <Clock size={12} />
-          {tutorial.duration}
+    <Card
+      onClick={onStart}
+      className="group cursor-pointer gap-0 overflow-hidden py-0 shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-lift)]"
+    >
+      {/* Mounted like a print: paper mat around the image */}
+      <div className="p-3 pb-0">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-secondary ring-1 ring-border">
+          {tutorial.thumbnail && (
+            <img
+              src={tutorial.thumbnail}
+              alt=""
+              className="size-full object-cover object-[center_30%] transition-transform duration-700 group-hover:scale-[1.04]"
+            />
+          )}
+          <Badge className="absolute left-3 top-3 border-[#5D7A58]/30 bg-card/95 text-[#5D7A58]">
+            <Sparkles /> Live AR practice
+          </Badge>
         </div>
-        <button
+      </div>
+      <CardHeader className="gap-2 px-5 pt-5">
+        <CardTitle className="font-serif text-xl font-normal leading-snug">{tutorial.title}</CardTitle>
+        <CardDescription className="leading-relaxed text-[#4A423B]">{tutorial.description}</CardDescription>
+      </CardHeader>
+      <CardContent className="px-5 pt-3">
+        <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Clock className="size-3.5" />
+          {tutorial.duration}
+        </span>
+      </CardContent>
+      <CardFooter className="px-5 pb-5 pt-4">
+        <Button
           type="button"
+          size="lg"
+          className="w-full rounded-full"
           onClick={(e) => {
             e.stopPropagation();
             onStart();
           }}
-          style={{
-            width: '100%', padding: '11px', borderRadius: '999px', border: 'none', cursor: 'pointer',
-            background: '#2F3B6B', color: '#FBF8F3',
-            fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.875rem',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-          }}
         >
           Start AR Practice
-          <ArrowRight size={14} />
-        </button>
-      </div>
-    </div>
+          <ArrowRight />
+        </Button>
+      </CardFooter>
+    </Card>
   );
+}
+
+function SectionLabel({ children }) {
+  return <p className="m-0 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-gold">{children}</p>;
 }
 
 export default function Dashboard({ user }) {
   const navigate = useNavigate();
   const isExpert = user?.role === 'Expert';
 
+  const stats = isExpert
+    ? [
+        { label: 'Tutorials', value: '0', icon: BookOpen, tone: 'indigo' },
+        { label: 'Followers', value: '0', icon: Users, tone: 'terracotta' },
+        { label: 'Posts', value: '0', icon: Rss, tone: 'gold' },
+        { label: 'Rating', value: '—', icon: Star, tone: 'sage' },
+      ]
+    : [
+        { label: 'Experts Followed', value: '0', icon: Users, tone: 'terracotta' },
+        { label: 'Tutorials Viewed', value: '0', icon: BookOpen, tone: 'indigo' },
+        { label: 'Posts Created', value: '0', icon: Rss, tone: 'gold' },
+        { label: 'Skills Explored', value: '0', icon: Star, tone: 'sage' },
+      ];
+
+  const actions = [
+    {
+      label: 'Go to Social Feed',
+      description: 'Browse posts from the community',
+      icon: Rss,
+      onClick: () => navigate('/feed'),
+      tone: 'indigo',
+    },
+    !isExpert && AR_TUTORIALS[0] && {
+      label: 'Start AR Practice',
+      description: `Practise ${AR_TUTORIALS[0].title} with your camera and an AI coach`,
+      icon: Hand,
+      onClick: () => navigate(getPracticePath(AR_TUTORIALS[0])),
+      tone: 'sage',
+    },
+    isExpert && {
+      label: 'View My Profile',
+      description: 'See how learners see your profile',
+      icon: User,
+      onClick: () => navigate(`/expert/${user.id}`),
+      tone: 'terracotta',
+    },
+    {
+      label: isExpert ? 'Manage Tutorials' : 'Browse Tutorials',
+      description: isExpert ? 'View your AR tutorial stubs' : 'Discover expert tutorials',
+      icon: BookOpen,
+      onClick: () => navigate('/feed'),
+      tone: 'gold',
+    },
+  ].filter(Boolean);
+
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--color-bg-primary)' }}>
-      {/* Hero banner */}
-      <div style={{
-        background: 'var(--color-sand-50)',
-        borderBottom: '1px solid var(--color-border)', padding: '56px 0 48px',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div className="glow-orb glow-orb-purple" style={{ width: '400px', height: '400px', top: '-200px', right: '-100px', opacity: 0.4 }} />
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
-            <div style={{
-              width: '76px', height: '76px', borderRadius: '50%', flexShrink: 0,
-              outline: '1px solid #A8873A', outlineOffset: '4px',
-              background: isExpert ? '#2F3B6B' : '#B0573D',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '1.9rem', fontWeight: 400, color: '#FBF8F3', fontFamily: 'var(--font-serif)',
-            }}>
-              {user?.name?.[0]?.toUpperCase() || '?'}
-            </div>
-            <div>
-              <p className="eyebrow" style={{ margin: '0 0 8px' }}>{isExpert ? 'Artisan studio' : 'Learner studio'}</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                <h1 style={{ fontSize: '2.4rem', margin: 0, fontWeight: 400 }}>
-                  Welcome back, <span className="gradient-text">{user?.name}</span>!
-                </h1>
-                <span className={`badge ${isExpert ? 'badge-expert' : 'badge-learner'}`}>
-                  {isExpert ? <Wand2 size={11} /> : <GraduationCap size={11} />}
-                  {user?.role}
-                </span>
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto max-w-[1120px] px-4 pb-20 pt-8 sm:px-6">
+        {/* ── Hero ─────────────────────────────────────────── */}
+        <Card className="relative gap-0 overflow-hidden py-0 shadow-[var(--shadow-soft)]">
+          <BlockPrintBand />
+          <div className="relative px-6 py-10 sm:px-10 sm:py-12">
+            <Jaali className="absolute inset-0 size-full text-[#A8873A] opacity-[0.08]" />
+            <Rosette className="absolute -right-24 -top-24 hidden size-[22rem] text-[#A8873A]/35 md:block" />
+
+            <div className="relative flex flex-wrap items-center gap-6 sm:gap-8 md:pr-56">
+              <div className="relative grid size-28 shrink-0 place-items-center">
+                <Rosette className="absolute inset-0 size-full text-[#A8873A]/60" />
+                <Avatar className="size-20 ring-4 ring-card">
+                  <AvatarFallback
+                    className={`font-serif text-3xl text-[#FBF8F3] ${isExpert ? 'bg-[#2F3B6B]' : 'bg-[#B0573D]'}`}
+                  >
+                    {user?.name?.[0]?.toUpperCase() || '?'}
+                  </AvatarFallback>
+                </Avatar>
               </div>
-              <p style={{ color: '#7A6F63', margin: '10px 0 0', fontSize: '0.95rem' }}>
-                {isExpert
-                  ? `Sharing ${user?.expertise || 'your craft'} with the Kalaverse`
-                  : 'Continue your craft learning journey'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="container" style={{ paddingTop: '40px', paddingBottom: '64px' }}>
-        {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '18px', marginBottom: '48px' }}>
-          {isExpert ? (
-            <>
-              <StatCard label="Tutorials" value="0" icon={BookOpen} color="purple" />
-              <StatCard label="Followers" value="0" icon={Users} color="cyan" />
-              <StatCard label="Posts" value="0" icon={Rss} color="amber" />
-              <StatCard label="Rating" value="—" icon={Star} color="green" />
-            </>
-          ) : (
-            <>
-              <StatCard label="Experts Followed" value="0" icon={Users} color="cyan" />
-              <StatCard label="Tutorials Viewed" value="0" icon={BookOpen} color="purple" />
-              <StatCard label="Posts Created" value="0" icon={Rss} color="amber" />
-              <StatCard label="Skills Explored" value="0" icon={Star} color="green" />
-            </>
-          )}
-        </div>
-
-        {/* Quick Actions */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '40px' }}>
-          {/* Left: Actions */}
-          <div>
-            <h3 className="eyebrow" style={{ margin: '0 0 16px', paddingBottom: '12px', borderBottom: '1px solid #DDD2C0' }}>
-              Quick Actions
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <QuickAction
-                label="Go to Social Feed"
-                description="Browse posts from the community"
-                icon={Rss}
-                onClick={() => navigate('/feed')}
-                color="#2F3B6B"
-              />
-              {!isExpert && AR_TUTORIALS[0] && (
-                <QuickAction
-                  label="Start AR Practice"
-                  description={`Practise ${AR_TUTORIALS[0].title} with your camera and an AI coach`}
-                  icon={Hand}
-                  onClick={() => navigate(getPracticePath(AR_TUTORIALS[0]))}
-                  color="#5D7A58"
-                />
-              )}
-              {isExpert && (
-                <QuickAction
-                  label="View My Profile"
-                  description="See how learners see your profile"
-                  icon={User}
-                  onClick={() => navigate(`/expert/${user.id}`)}
-                  color="#B0573D"
-                />
-              )}
-              <QuickAction
-                label={isExpert ? 'Manage Tutorials' : 'Browse Tutorials'}
-                description={isExpert ? 'View your AR tutorial stubs' : 'Discover expert tutorials'}
-                icon={BookOpen}
-                onClick={() => navigate('/feed')}
-                color="#A8873A"
-              />
-            </div>
-          </div>
-
-          {/* Right: Profile summary */}
-          <div>
-            <h3 className="eyebrow" style={{ margin: '0 0 16px', paddingBottom: '12px', borderBottom: '1px solid #DDD2C0' }}>
-              Your Profile
-            </h3>
-            <div className="glass-card" style={{ padding: '24px' }}>
-              {user?.bio ? (
-                <p style={{ color: '#4A423B', fontFamily: 'var(--font-serif)', fontSize: '1.05rem', lineHeight: 1.65, margin: '0 0 16px' }}>{user.bio}</p>
-              ) : (
-                <p style={{ color: '#A39887', fontSize: '0.9rem', fontStyle: 'italic', margin: '0 0 16px' }}>
-                  No bio added yet.
+              <div className="min-w-0 flex-1">
+                <SectionLabel>{isExpert ? 'Artisan studio' : 'Learner studio'}</SectionLabel>
+                <div className="mt-2 flex flex-wrap items-center gap-3">
+                  <h1 className="m-0 text-4xl font-normal leading-tight sm:text-[2.6rem]">
+                    Welcome back, <span className="italic text-[#2F3B6B]">{user?.name}</span>!
+                  </h1>
+                  <Badge
+                    variant="outline"
+                    className={
+                      isExpert
+                        ? 'border-[#2F3B6B]/25 bg-[#2F3B6B]/8 text-[#2F3B6B]'
+                        : 'border-[#B0573D]/30 bg-[#B0573D]/8 text-[#B0573D]'
+                    }
+                  >
+                    {isExpert ? <Wand2 /> : <GraduationCap />}
+                    {user?.role}
+                  </Badge>
+                </div>
+                <p className="mb-0 mt-3 text-[0.95rem] text-muted-foreground">
+                  {isExpert
+                    ? `Sharing ${user?.expertise || 'your craft'} with the Kalaverse`
+                    : 'Continue your craft learning journey'}
                 </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* ── Stats ────────────────────────────────────────── */}
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((s) => (
+            <StatCard key={s.label} {...s} />
+          ))}
+        </div>
+
+        {/* ── Actions + Profile ────────────────────────────── */}
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+          <Card className="gap-4 shadow-[var(--shadow-soft)]">
+            <CardHeader>
+              <SectionLabel>Quick Actions</SectionLabel>
+              <CardTitle className="font-serif text-2xl font-normal">Where to next?</CardTitle>
+            </CardHeader>
+            <CardContent className="px-3 sm:px-4">
+              {actions.map((a, i) => (
+                <Fragment key={a.label}>
+                  {i > 0 && <Separator className="mx-3 w-auto" />}
+                  <ActionRow {...a} />
+                </Fragment>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="relative gap-4 overflow-hidden shadow-[var(--shadow-soft)]">
+            <Rosette className="absolute -bottom-20 -right-20 size-56 text-[#A8873A]/15" />
+            <CardHeader>
+              <SectionLabel>Your Profile</SectionLabel>
+              <CardTitle className="font-serif text-2xl font-normal">{user?.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="relative flex flex-1 flex-col gap-5">
+              {user?.bio ? (
+                <blockquote className="relative m-0 border-l-2 border-[#A8873A]/50 pl-4 font-serif text-lg italic leading-relaxed text-[#4A423B]">
+                  {user.bio}
+                </blockquote>
+              ) : (
+                <p className="m-0 font-serif italic text-muted-foreground">No bio added yet.</p>
               )}
 
               {isExpert && user?.expertise && (
-                <div style={{ marginBottom: '12px' }}>
-                  <span className="eyebrow" style={{ display: 'block', marginBottom: '6px' }}>CRAFT</span>
-                  <span className="badge badge-expert">{user.expertise}</span>
+                <div>
+                  <SectionLabel>CRAFT</SectionLabel>
+                  <Badge variant="outline" className="mt-2 border-[#2F3B6B]/25 bg-[#2F3B6B]/8 text-[#2F3B6B]">
+                    {user.expertise}
+                  </Badge>
                 </div>
               )}
 
               {(user?.contact?.email || user?.contact?.mobile) && (
-                <div style={{ fontSize: '0.82rem', color: '#7A6F63', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  {user.contact.email && <span>✉ {user.contact.email}</span>}
-                  {user.contact.mobile && <span>📞 {user.contact.mobile}</span>}
+                <div className="flex flex-col gap-2 text-sm text-[#4A423B]">
+                  {user.contact.email && (
+                    <span className="inline-flex items-center gap-2">
+                      <Mail className="size-4 text-[#A8873A]" /> {user.contact.email}
+                    </span>
+                  )}
+                  {user.contact.mobile && (
+                    <span className="inline-flex items-center gap-2">
+                      <Phone className="size-4 text-[#A8873A]" /> {user.contact.mobile}
+                    </span>
+                  )}
                 </div>
               )}
-
-              {isExpert && (
-                <button
+            </CardContent>
+            {isExpert && (
+              <CardFooter className="relative">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full rounded-full border-[#2F3B6B]/35 text-[#2F3B6B] hover:bg-[#2F3B6B]/5 hover:text-[#2F3B6B]"
                   onClick={() => navigate(`/expert/${user.id}`)}
-                  className="btn-secondary"
-                  style={{ width: '100%', marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                 >
-                  <Sparkles size={15} />
+                  <Sparkles />
                   View Public Profile
-                </button>
-              )}
-            </div>
-          </div>
+                </Button>
+              </CardFooter>
+            )}
+          </Card>
         </div>
 
-        {/* AR Practice */}
+        {/* ── AR Practice ──────────────────────────────────── */}
         {AR_TUTORIALS.length > 0 && (
-          <section style={{ marginTop: '64px', paddingTop: '40px', borderTop: '1px solid #DDD2C0' }} aria-labelledby="ar-practice-heading">
-            <h3 id="ar-practice-heading" style={{ fontSize: '2rem', fontWeight: 400, margin: '0 0 8px' }}>
-              AR Practice
-            </h3>
-            <p style={{ color: '#7A6F63', fontSize: '0.95rem', margin: '0 0 28px', maxWidth: '560px' }}>
-              Practise with your camera: hand tracking checks each step and an AI coach guides you.
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: '28px' }}>
+          <section className="mt-16" aria-labelledby="ar-practice-heading">
+            <OrnamentDivider className="mb-10" />
+            <div className="mb-8 max-w-xl">
+              <SectionLabel>From the studio</SectionLabel>
+              <h2 id="ar-practice-heading" className="mb-2 mt-2 text-4xl font-normal">
+                AR Practice
+              </h2>
+              <p className="m-0 text-muted-foreground">
+                Practise with your camera: hand tracking checks each step and an AI coach guides you.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {AR_TUTORIALS.map((tutorial) => (
                 <PracticeCard
                   key={tutorial.id}
