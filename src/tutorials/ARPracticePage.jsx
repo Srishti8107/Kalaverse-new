@@ -9,7 +9,7 @@ import {
   describeCameraError,
 } from './mediaPipeService';
 import { CraftRuleEngine, STEPS, REASON, COLUMN_ZONES } from './craftLogic';
-import { buildFeedbackPayload, getCoachFeedback, hasGeminiConfig, COACH_MODEL } from '../services/geminiService';
+import { buildFeedbackPayload, coachingKey, getCoachFeedback, hasGeminiConfig, COACH_MODEL } from '../services/geminiService';
 import { getTutorialById, getPracticePath } from './index';
 
 /*
@@ -194,7 +194,8 @@ function PracticeSession({ tutorial }) {
 
   /* ---------------------------- AI coach ------------------------------ */
 
-  const coachKey = `${frame.stepIndex}|${frame.result}|${frame.reason}`;
+  // Re-coach when the verdict or any fact the message names (column, side, missing columns) changes.
+  const coachKey = coachingKey(STEPS[frame.stepIndex], frame);
 
   useEffect(() => {
     if (phase !== 'running') return undefined;
