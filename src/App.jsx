@@ -1,11 +1,14 @@
 // src/App.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import UserEntry from './pages/UserEntry';
 import Dashboard from './pages/Dashboard';
 import FeedPage from './pages/FeedPage';
 import ExpertProfile from './pages/ExpertProfile';
+
+// Loaded on demand so MediaPipe stays out of the main bundle.
+const ARPracticePage = lazy(() => import('./tutorials/ARPracticePage'));
 
 // ─── Protected Route Helper ───────────────────────────────────
 function ProtectedRoute({ user, children }) {
@@ -119,6 +122,18 @@ export default function App() {
               element={
                 <ProtectedRoute user={user}>
                   <ExpertProfile currentUser={user} />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* AR Practice — accessible to any logged-in user */}
+            <Route
+              path="/practice/:tutorialId"
+              element={
+                <ProtectedRoute user={user}>
+                  <Suspense fallback={null}>
+                    <ARPracticePage />
+                  </Suspense>
                 </ProtectedRoute>
               }
             />

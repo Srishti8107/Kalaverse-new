@@ -6,52 +6,22 @@ import {
   Play, Clock, Users, ChevronRight, Sparkles, ExternalLink, Loader2,
 } from 'lucide-react';
 import { getUserById } from '../services/firebase';
+import { TUTORIALS, getPracticePath } from '../tutorials';
 
-// ─── Stub tutorial data (AR logic not yet implemented) ───────
-const STUB_TUTORIALS = [
-  {
-    id: 'tut-1',
-    title: 'Introduction to Hand-Thrown Pottery',
-    description: 'Learn the basics of centering clay on the wheel and pulling your first cylinder.',
-    duration: '45 min',
-    type: 'free',
-    thumbnail: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&auto=format&fit=crop',
-    studentsCount: 128,
-    rating: 4.8,
-  },
-  {
-    id: 'tut-2',
-    title: 'Advanced Glazing Techniques',
-    description: 'Explore layered glaze applications, wax resist, and trailing methods for unique effects.',
-    duration: '1h 20min',
-    type: 'paid',
-    price: '₹499',
-    thumbnail: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&auto=format&fit=crop',
-    studentsCount: 64,
-    rating: 4.9,
-  },
-  {
-    id: 'tut-3',
-    title: 'AR-Guided Wheel Throwing (Coming Soon)',
-    description: 'Experience guided throwing with real-time AR overlay for hand positioning and pressure.',
-    duration: '~2h',
-    type: 'paid',
-    price: '₹899',
-    thumbnail: '',
-    studentsCount: 0,
-    rating: null,
-    comingSoon: true,
-  },
-];
-
-function TutorialCard({ tutorial, expertName }) {
+function TutorialCard({ tutorial, onOpen }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
   const isPaid = tutorial.type === 'paid';
   const isSoon = tutorial.comingSoon;
+  const practicePath = getPracticePath(tutorial);
+  const open = practicePath ? () => onOpen(practicePath) : undefined;
 
   return (
-    <div className="tutorial-card" style={{ opacity: isSoon ? 0.7 : 1 }}>
+    <div
+      className="tutorial-card"
+      onClick={open}
+      style={{ opacity: isSoon ? 0.7 : 1, cursor: practicePath ? 'pointer' : 'default' }}
+    >
       {/* Thumbnail */}
       <div style={{
         height: '160px', position: 'relative', overflow: 'hidden',
@@ -139,19 +109,25 @@ function TutorialCard({ tutorial, expertName }) {
           )}
         </div>
 
-        {/* AR stub notice */}
+        {/* AR practice notice */}
         <div style={{
           padding: '8px 12px', borderRadius: '8px', marginBottom: '12px',
-          background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)',
+          background: practicePath ? 'rgba(63,191,107,0.08)' : 'rgba(168,85,247,0.06)',
+          border: practicePath ? '1px solid rgba(63,191,107,0.25)' : '1px solid rgba(168,85,247,0.15)',
           display: 'flex', alignItems: 'center', gap: '6px',
-          fontSize: '0.75rem', color: '#8b5cf6',
+          fontSize: '0.75rem', color: practicePath ? '#4ade80' : '#8b5cf6',
         }}>
           <Sparkles size={12} />
-          AR tutorial logic — coming in a future phase
+          {practicePath ? 'Live AR practice with AI coach' : 'AR practice — coming in a future phase'}
         </div>
 
         <button
+          type="button"
           disabled={isSoon}
+          onClick={(e) => {
+            e.stopPropagation();
+            open?.();
+          }}
           style={{
             width: '100%', padding: '10px', borderRadius: '10px', border: 'none', cursor: isSoon ? 'not-allowed' : 'pointer',
             background: isSoon ? 'rgba(255,255,255,0.04)' : 'linear-gradient(135deg, #a855f7, #ec4899)',
@@ -161,7 +137,7 @@ function TutorialCard({ tutorial, expertName }) {
             transition: 'opacity 0.2s',
           }}
         >
-          {isSoon ? 'Notify Me' : (isPaid ? `Enroll — ${tutorial.price}` : 'Start Free Tutorial')}
+          {isSoon ? 'Notify Me' : practicePath ? 'Start AR Practice' : (isPaid ? `Enroll — ${tutorial.price}` : 'Start Free Tutorial')}
           {!isSoon && <ChevronRight size={14} />}
         </button>
       </div>
@@ -313,8 +289,8 @@ export default function ExpertProfile({ currentUser }) {
             {/* Stats */}
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               {[
-                { label: 'Tutorials', value: STUB_TUTORIALS.length },
-                { label: 'Students', value: STUB_TUTORIALS.reduce((a, t) => a + t.studentsCount, 0) },
+                { label: 'Tutorials', value: TUTORIALS.length },
+                { label: 'Students', value: TUTORIALS.reduce((a, t) => a + t.studentsCount, 0) },
                 { label: 'Rating', value: '4.9 ★' },
               ].map(({ label, value }) => (
                 <div key={label} style={{ textAlign: 'center', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--color-border)' }}>
@@ -374,18 +350,18 @@ export default function ExpertProfile({ currentUser }) {
               </div>
               <div>
                 <div style={{ fontFamily: 'Outfit', fontWeight: 700, color: '#c084fc', fontSize: '0.95rem', marginBottom: '2px' }}>
-                  AR Tutorial System — Phase 2
+                  AR Practice with AI Coach
                 </div>
                 <div style={{ color: '#64748b', fontSize: '0.82rem' }}>
-                  The AR tutorial execution logic is reserved for a future implementation phase. The cards below show the planned tutorial layout.
+                  Tutorials marked “Live AR practice” open your camera, track your hands step by step, and give real-time coaching. More crafts are coming soon.
                 </div>
               </div>
             </div>
 
             {/* Tutorial grid */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-              {STUB_TUTORIALS.map(tutorial => (
-                <TutorialCard key={tutorial.id} tutorial={tutorial} expertName={expert?.name} />
+              {TUTORIALS.map(tutorial => (
+                <TutorialCard key={tutorial.id} tutorial={tutorial} onOpen={navigate} />
               ))}
             </div>
           </div>

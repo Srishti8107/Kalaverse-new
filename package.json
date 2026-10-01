@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "1.0.1",
+    "@rolldown/binding-win32-x64-msvc": "^1.2.12",
     "@tailwindcss/vite": "^4.3.3",
     "firebase": "^12.19.0",
     "lucide-react": "^1.49.0",
